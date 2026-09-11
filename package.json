@@ -1,0 +1,17 @@
+{
+  "name": "luna-calendar",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Cross-platform lunar + solar calendar app with Google Calendar / Lark Calendar sync",
+  "scripts": {
+    "build": "pnpm -r --filter=./packages/* build",
+    "test": "pnpm -r --filter=./packages/* test",
+    "lint": "pnpm -r lint"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

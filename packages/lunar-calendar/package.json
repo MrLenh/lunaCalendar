@@ -1,0 +1,16 @@
+{
+  "name": "@luna/lunar-calendar",
+  "version": "0.1.0",
+  "description": "Solar <-> Vietnamese/Chinese lunar calendar conversion and lunar recurrence rule expansion",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --test --import tsx dist-test/*.test.js 2>/dev/null || tsx --test src/**/*.test.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4",
+    "tsx": "^4.16.2",
+    "@types/node": "^20.14.0"
+  }
+}
