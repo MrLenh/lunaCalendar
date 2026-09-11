@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "node --test --import tsx dist-test/*.test.js 2>/dev/null || tsx --test src/**/*.test.ts"
+    "test": "tsx --test src/convert.test.ts"
   },
   "devDependencies": {
     "typescript": "^5.5.4",

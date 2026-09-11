@@ -12,4 +12,5 @@ web-build/
 coverage/
 *.tsbuildinfo
 .turbo/
-prisma/dev.db
+*.db
+*.db-journal

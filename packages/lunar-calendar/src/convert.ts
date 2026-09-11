@@ -127,7 +127,12 @@ export function lunarMonthLength(
     const next = lunarToSolar(1, month, year, false, timeZone);
     nextStartJd = astro.jdFromDate(next.day, next.month, next.year);
   } else {
-    const k = Math.floor((startJd - 2415021.076998695) / 29.530588853);
+    // Must round (not floor) to the nearest new-moon index: startJd is
+    // itself an exact new-moon day, but floating-point error can push
+    // (startJd - epoch) / synodicMonth just under the true integer index,
+    // which floor() would then read as the *previous* new moon — making
+    // `k + 1` collapse back onto `startJd` and this function return 0.
+    const k = Math.round((startJd - 2415021.076998695) / 29.530588853);
     nextStartJd = astro.getNewMoonDay(k + 1, timeZone);
     void nextMonth;
     void nextYear;

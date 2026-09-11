@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { solarToLunar, lunarToSolar } from "./convert";
+import { solarToLunar, lunarToSolar, lunarMonthLength } from "./convert";
 import { expandLunarRecurrence, LunarRecurrenceRule } from "./recurrence";
 
 test("known Vietnamese Tet (lunar new year) solar dates", () => {
@@ -67,6 +67,34 @@ test("yearly lunar recurrence expands one occurrence per lunar year", () => {
     { day: 29, month: 1, year: 2025 },
     { day: 17, month: 2, year: 2026 },
   ]);
+});
+
+test("lunarMonthLength never returns 0 (regression: floating-point rounding bug)", () => {
+  // month 1 (thang Gieng) across several years, including 2027 where a plain
+  // Math.floor() of the new-moon index used to underflow by one and yield 0.
+  for (const y of [2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]) {
+    const len = lunarMonthLength(1, y, false);
+    assert.ok(len === 29 || len === 30, `lunarMonthLength(1, ${y}) should be 29 or 30, got ${len}`);
+  }
+});
+
+test("yearly lunar recurrence anchored on Tet lands on Tet every year, 2024-2030", () => {
+  const rule: LunarRecurrenceRule = {
+    type: "lunar",
+    freq: "yearly",
+    anchor: { day: 10, month: 2, year: 2024 }, // Tet 2024
+  };
+  const occurrences = expandLunarRecurrence(
+    rule,
+    { day: 1, month: 1, year: 2024 },
+    { day: 31, month: 12, year: 2030 }
+  );
+  for (const o of occurrences) {
+    const lunar = solarToLunar(o.day, o.month, o.year);
+    assert.equal(lunar.day, 1, `${JSON.stringify(o)} should be lunar day 1`);
+    assert.equal(lunar.month, 1, `${JSON.stringify(o)} should be lunar month 1`);
+  }
+  assert.equal(occurrences.length, 7);
 });
 
 test("monthly lunar recurrence (ngay ram - 15th of every lunar month)", () => {
